@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace Library.Controllers
 {
-  public class HomeController : Controllers
+  public class HomeController : Controller
   {
     private readonly LibraryContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
@@ -21,17 +21,19 @@ namespace Library.Controllers
     [HttpGet("/")]
     public async Task<ActionResult> Index()
     {
-      Author[] author = _db.Authors.ToArray();
+      Author[] authors = _db.Authors.ToArray();
       Dictionary<string, object[]> model = new Dictonary<string, object[]>();
       model.Add("authors", authors);
-      string userId = this.User.FindFirst(ClainTypes.NameIdentifier)?.Value;
+      string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       if (currentUser != null)
       {
-        Book[] books = _db.Books.Where(entry => entry.User.Id == currentUser.Id).ToArray();
-        model.Add("books", books);
+        Book[] books = _db.Books
+          .Where(entry => entry.User.Id == currentUser.Id)
+          .ToArray();
+          model.Add("books", books);
       }
-      return ViewModels(model);
+      return View(model);
     }
   }
 }

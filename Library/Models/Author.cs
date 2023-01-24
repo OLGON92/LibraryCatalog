@@ -9,5 +9,6 @@ namespace Library.Models
     [Required(ErrorMessage = "The authors name must be filled out")]
     public string Name { get; set; }
     public List<AuthorBook> JoinEntities { get; }
+    public ApplicationUser User { get; set; }
   }
 }

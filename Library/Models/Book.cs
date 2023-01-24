@@ -12,5 +12,6 @@ namespace Library.Models
     public string Genre { get; set; }
     public List<AuthorBook> JoinEntities { get; }
     public ApplicationUser User { get; set; }
+    
   }
 }

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using ToDoList.Models;
+using Library.Models;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
@@ -24,9 +24,9 @@ namespace Library.Controllers
 
     public async Task<ActionResult> Index()
     {
-      string userId = userId.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-      List<AuthorsController> userAuthors = _db.Authors
+      List<Author> userAuthors = _db.Authors
         .Where(entry => entry.User.Id == currentUser.Id)
         .ToList();
       return View(userAuthors);
@@ -34,11 +34,11 @@ namespace Library.Controllers
 
     public ActionResult Create()
     {
-      return View(author);
+      return View();
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create(Author author, int BookId)
+    public async Task<ActionResult> Create(Author author)
     {
       if (!ModelState.IsValid)
       {
@@ -105,7 +105,7 @@ namespace Library.Controllers
     public ActionResult AddBook(Author author, int bookId)
     {
       #nullable enable
-      AuthorBook? joinEntity = _db.AuthorBooks.FirstOrDefault(join => (join.BookId == bookId && join.AuthorId == author.AutohrId));
+      AuthorBook? joinEntity = _db.AuthorBooks.FirstOrDefault(join => (join.BookId == bookId && join.AuthorId == author.AuthorId));
       #nullable disable
       if (joinEntity == null && bookId != 0)
       {
@@ -118,8 +118,8 @@ namespace Library.Controllers
     [HttpPost]
     public ActionResult DeleteJoin(int joinId)
     {
-      AuthorBook joinEntry = _db.AuthorBook.FirstOrDefault(entry => entry.AuthorBookId == joinId);
-      _db.AuhtorBooks.Remove(joinEntry);
+      AuthorBook joinEntry = _db.AuthorBooks.FirstOrDefault(entry => entry.AuthorBookId == joinId);
+      _db.AuthorBooks.Remove(joinEntry);
       _db.SaveChanges();
       return RedirectToAction("Index");
     }

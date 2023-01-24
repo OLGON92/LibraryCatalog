@@ -10,7 +10,7 @@
 
 @*@if (User.Identity.IsAuthenticated)*@
 {
-  <h4>Authors <!--@User.Identity.Name--></h4>
+  <h4>Authors @*@User.Identity.Name*@</h4>
   @if (Model["authors"].Length == 0)
   {
     <p>No Authors have been added yet!</p>
@@ -22,11 +22,11 @@
     }
   </ul>
 }
-<!--else
+@*else
 {
   <h4>Authors</h4>
   <p>Please @Html.ActionLink("log in", "LogIn", "Account") to view or manage your authors.</p>
-}-->
+}*@
 <br>
 @if (User.Identity.IsAuthenticated)
 {
