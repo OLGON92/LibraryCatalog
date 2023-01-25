@@ -8,29 +8,9 @@
 
 <br>
 
-@*@if (User.Identity.IsAuthenticated)*@
-{
-  <h4>Authors @*@User.Identity.Name*@</h4>
-  @if (Model["authors"].Length == 0)
-  {
-    <p>No Authors have been added yet!</p>
-  }
-  <ul>
-    @foreach (Author author in Model["authors"])
-    {
-      <li>@Html.ActionLink(@author.Name, "Details", "Books", new { id = @author.AuthorId})</li>
-    }
-  </ul>
-}
-@*else
-{
-  <h4>Authors</h4>
-  <p>Please @Html.ActionLink("log in", "LogIn", "Account") to view or manage your authors.</p>
-}*@
-<br>
 @if (User.Identity.IsAuthenticated)
 {
-  <h4>Books @User.Identity.Name</h4>
+  <h4>Books</h4>
   @if (Model["books"].Length == 0)
   {
     <p>No Books have been added yet!</p>
@@ -38,7 +18,23 @@
   <ul>
     @foreach (Book book in Model["books"])
     {
-      <li>@Html.ActionLink(@book.Title, "Details", "Books", new { id = @book.BookId})</li>
+      <li>@Html.ActionLink(@book.Title, "Details", new { id = @book.BookId})</li>
+    }
+  </ul>
+}
+
+<br>
+@if (User.Identity.IsAuthenticated)
+{
+  <h4>Authors @User.Identity.Name</h4>
+  @if (Model["authors"].Length == 0)
+  {
+    <p>No Authors have been added yet!</p>
+  }
+  <ul>
+    @foreach (Author author in Model["authors"])
+    {
+      <li>@Html.ActionLink(@author.Name, "Details", new { id = @author.AuthorId})</li>
     }
   </ul>
 }
@@ -51,3 +47,5 @@ else
 <br>
 
 <p>@Html.ActionLink("Create or manage an account", "Index", "Account")</p>
+<p>@Html.ActionLink("Manage authors", "Index", "Authors")</p>
+<p>@Html.ActionLink("Manage books", "Index", "Books")</p>
